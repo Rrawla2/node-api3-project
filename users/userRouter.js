@@ -23,11 +23,11 @@ router.post('/', validateUser, (req, res) => {
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
-  const newPost = {...req.body, user_id: req.params.id}
-    console.log("First New Post Text", newPost.text)
+  const newPost = {...req.body, user_id: Number(req.params.id)}
+    console.log("First New Post Text", newPost)
   Users.insert(newPost)
     .then(post => {
-      if (newPost.user_id) {
+      if (newPost) {
         res.status(201).json(post)
       } else if (!newPost.text) {
         res.status(400).json({ message: "The text is missing from this post" })
