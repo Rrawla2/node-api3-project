@@ -9,7 +9,7 @@ router.use((req, res, next) => {
   next();
 })
 
-router.post('/', (req, res) => {
+router.post('/', validateUser, (req, res) => {
   // do your magic!
   const  user = req.body 
   Users.insert(user)
@@ -60,7 +60,7 @@ router.get('/:id', validateUserId, (req, res) => {
   res.status(200).json(req.user)
 });
 
-router.get('/:id/posts', validateUserId, validatePost, (req, res) => {
+router.get('/:id/posts', validateUser, validatePost, (req, res) => {
   // do your magic!
   const { id } = req.params
   Users.getUserPosts(id)
@@ -128,17 +128,15 @@ function validateUserId(req, res, next) {
 function validateUser(req, res, next) {
   // do your magic!
   const user = req.body
-    .then(user => {
-      if(!user) {
+      if(user) {
+        next();
+      } else if (!user) {
         res.status(400).json({ message: "Missing User data" })
       } else if (!user.name) {
         res.status(400).json({ message: "Missing required name field"})
-        next();
+      } else {
+        res.status(500).json({ error: "User could not be validated"})
       }
-      })
-    .catch(err => {
-      res.status(500).json({ error: "User could not be validated"})
-    })
 }
 
 function validatePost(req, res, next) {
@@ -146,19 +144,14 @@ function validatePost(req, res, next) {
   const { id } = req.params
   const body = req.body
   console.log("ID", id)
-  console.log("body", body)
-  Posts.getById(id)
-    .then(post => {
-      if (!body || body === {}) {
+  console.log("validate body", body)
+      if (body) {
+        next();     
+      } else if(!body || body === {}) {
         res.status(400).json({ message: "Missing the post data" })
-      }else {
-        next();
+      } else {
+        res.status(500).json({ message: "Could not validate post" })
       }
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Could not validate post" })
-    })
-
 }
 
 module.exports = router;
