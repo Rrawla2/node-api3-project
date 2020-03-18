@@ -37,12 +37,37 @@ router.get('/:id/posts', (req, res) => {
   // do your magic!
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res) => {
   // do your magic!
+  const { id } = req.params
+  Users.remove(id)
+    .then(user => {
+      if (user) {
+        res.status(200).json({ message: "The User has been removed" })
+      } else {
+        res.status(404).json({ message: "The User could not be found" })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: "There was an error removing the User" })
+    })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
   // do your magic!
+  const { id } = req.params
+  const updates = req.body
+  Users.update(id, updates)
+    .then(user => {
+      if(user) {
+        res.status(200).json(user)
+      } else {
+        res.status(404).json({ message: "The User could not be found" })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: "Error saving User updates" })
+    })
 });
 
 //custom middleware
