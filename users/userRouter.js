@@ -23,16 +23,16 @@ router.post('/', (req, res) => {
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
-  const { id } = req.params
-  const newPost = req.body
-  newPost.user_id = id
-
-  Users.insert(newPost)
+  const newPost = {...req.body, user_id: req.params.id}
+  // const { id } = req.params
+  // const newPost = req.body
+  // newPost.user_id = id
+    console.log("First New Post Text", newPost.text)
+  Posts.insert(newPost)
     .then(post => {
-      console.log("New Post", post)
-      if (post.id) {
+      if (newPost.user_id) {
         res.status(201).json(post)
-      } else if (!post) {
+      } else if (!newPost.text) {
         res.status(400).json({ message: "The text is missing from this post" })
       } else {
         res.status(404).json({ message: "Post with the specified ID does not exist" })
@@ -145,10 +145,10 @@ function validatePost(req, res, next) {
   // do your magic!
   const { id } = req.params
   const body = req.body
-  
-  Users.getById(id)
-    .then(body => {
-      console.log("body.text", body)
+  console.log("ID", id)
+  console.log("body", body)
+  Posts.getById(id)
+    .then(post => {
       if (!body || body === {}) {
         res.status(400).json({ message: "Missing the post data" })
       }else {
