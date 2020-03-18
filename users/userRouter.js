@@ -24,11 +24,8 @@ router.post('/', validateUser, (req, res) => {
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
   const newPost = {...req.body, user_id: req.params.id}
-  // const { id } = req.params
-  // const newPost = req.body
-  // newPost.user_id = id
     console.log("First New Post Text", newPost.text)
-  Posts.insert(newPost)
+  Users.insert(newPost)
     .then(post => {
       if (newPost.user_id) {
         res.status(201).json(post)
@@ -148,9 +145,9 @@ function validatePost(req, res, next) {
       if (body) {
         next();     
       } else if(!body || body === {}) {
-        res.status(400).json({ message: "Missing the post data" })
+        res.status(400).json({ message: "Missing the user data" })
       } else {
-        res.status(500).json({ message: "Could not validate post" })
+        res.status(500).json({ message: "Could not validate user" })
       }
 }
 
