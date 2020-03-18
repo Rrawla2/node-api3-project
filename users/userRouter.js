@@ -24,8 +24,8 @@ router.post('/', validateUser, (req, res) => {
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
   const newPost = {...req.body, user_id: Number(req.params.id)}
-    console.log("First New Post Text", newPost)
-  Users.insert(newPost)
+    console.log("First New Post Object", newPost)
+  Posts.insert(newPost)
     .then(post => {
       if (newPost) {
         res.status(201).json(post)
