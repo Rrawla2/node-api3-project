@@ -13,7 +13,7 @@ server.get('/', (req, res) => {
   
 });
 server.get('/', (req, res) => {
-  res.send(`To see the list add /api/users to the url`)
+  res.send(`<h3>To see the list add /api/users to the url<h3>`)
 })
 //custom middleware
 
