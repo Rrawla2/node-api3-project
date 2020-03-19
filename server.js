@@ -9,11 +9,11 @@ server.use("/api/users", userRouter);
 server.use("/api/posts", postRouter);
 
 server.get('/', (req, res) => {
-  res.send(`<h2>See what LOTR characters are posting here!</h2>`);
+  res.send(`<h2>See what LOTR characters are posting here!</h2><br /><h3>To see the list add /api/users to the url<h3>`);
   
 });
 server.get('/', (req, res) => {
-  res.send(`<h3>To see the list add /api/users to the url<h3>`)
+  res.send(``)
 })
 //custom middleware
 
